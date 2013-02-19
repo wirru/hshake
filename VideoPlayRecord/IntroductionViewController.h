@@ -17,7 +17,8 @@
 - (void)introCompleted:(IntroductionViewController*)controller;
 @end
 
-@interface IntroductionViewController : UIViewController <UIScrollViewDelegate>
+@interface IntroductionViewController : UIViewController <UIScrollViewDelegate, UIImagePickerControllerDelegate>
 @property (nonatomic, weak) id<IntroCompletedDelegate> delegate;
+
 +(BOOL)alreadyCompleted;
 @end

@@ -11,10 +11,15 @@
 #import "FlexibleGradientView.h"
 #import <QuartzCore/QuartzCore.h>
 
+#import <AVFoundation/AVFoundation.h>
+#import <CoreMedia/CoreMedia.h>
+#import <MobileCoreServices/UTCoreTypes.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <MediaPlayer/MediaPlayer.h>
 #define kCurrentIntroVersion 1
 #define kIntroVersionFinished @"IntroVersionAlreadyFinished"
 #define CORNER_RADIUS 7.0f
-#define kNumberOfIntroPages 5.0f
+#define kNumberOfIntroPages 3
 #define kForegroundToBackgroundScrollFactor 6.0f
 
 @implementation SmoothWhiteGradient
@@ -61,6 +66,14 @@
     
     UIButton* _getStartedButton;
     FlexibleGradientView* _getStartedButtonDepressedOverlay;
+    
+    NSString* firstVideoPath;
+    NSString* secondVideoPath;
+    
+    AVURLAsset* firstAsset;
+    AVURLAsset* secondAsset;
+    
+    BOOL first;
 }
 
 @end
@@ -71,6 +84,7 @@
 {
     self = [super init];
     if (self) {
+        first = YES;
         _orangeColor = [UIColor colorWithRed:243.0f/255.0f green:162.0f/255.0f blue:63.0f/255.0f alpha:1.0f];
         self.view.layer.cornerRadius = CORNER_RADIUS;
         self.view.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
@@ -148,119 +162,59 @@
     [_backgroundScrollView addSubview:background];
     
     // Setup the first page
-    UIImageView* logo1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"2plusLogo.png"]];
-    logo1.contentMode = UIViewContentModeScaleAspectFit;
-    logo1.center = CGPointMake(self.view.bounds.size.width/2 + 10, 100);
-    [_foregroundScrollView addSubview:logo1];
     
+    UIButton* record = [UIButton buttonWithType:UIButtonTypeCustom];
+    record.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
+    record.frame = CGRectMake(0, 0, 280, 50);
+    record.center = CGPointMake(self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
+    [record addTarget:self action:@selector(recordFirst:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UILabel* buttonText1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, record.frame.size.width, record.frame.size.height)];
+    buttonText1.center = CGPointMake(record.frame.size.width/2, record.frame.size.height/2);
+    buttonText1.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:45.0f];
+    buttonText1.text = @"Record First";
+    buttonText1.textColor = [UIColor whiteColor];
+    buttonText1.textAlignment = UITextAlignmentCenter;
+    buttonText1.backgroundColor = [UIColor clearColor];
+    [record addSubview:buttonText1];
+    [_foregroundScrollView addSubview:record];
     
     
     // Setup the second page
-    
-// Save this stuff for when we actually release the editor
-//    UIImageView* successKid = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sticker15.png"]];
-//    successKid.contentMode = UIViewContentModeScaleAspectFit;
-//    successKid.frame = CGRectMake(0, 0, self.view.bounds.size.width, 220);
-//    successKid.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2-38, self.view.bounds.size.height-100);
-//    [_foregroundScrollView addSubview:successKid];
-//    
-//    UIImageView* leo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sticker12.png"]];
-//    leo.contentMode = UIViewContentModeScaleAspectFit;
-//    leo.frame = CGRectMake(0, 0, self.view.bounds.size.width, 150);
-//    leo.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2+100, self.view.bounds.size.height-70);
-//    [_foregroundScrollView addSubview:leo];
-//
-//    UIImageView* shareEverything = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sticker20.png"]];
-//    shareEverything.contentMode = UIViewContentModeScaleAspectFit;
-//    shareEverything.frame = CGRectMake(0, 0, self.view.bounds.size.width, 200);
-//    shareEverything.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2+5, 80);
-//    shareEverything.transform = CGAffineTransformMakeRotation(3.14159);
-//    [_foregroundScrollView addSubview:shareEverything];
-    
-    UIImageView* funnyFace = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shareWhatever.png"]];
-    funnyFace.contentMode = UIViewContentModeScaleAspectFit;
-    funnyFace.alpha = 0.9f;
-    funnyFace.frame = CGRectMake(0, 0, self.view.bounds.size.width-25, self.view.bounds.size.height-40);
-    funnyFace.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2, self.view.bounds.size.height/2-50);
-    [_foregroundScrollView addSubview:funnyFace];
-    
-//    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(label1.center.x - 12, label1.frame.origin.y + 71, 110, 6)];
-//    lineView.backgroundColor = [UIColor orangeColor];
-//    lineView.layer.cornerRadius = 3.0f;
-//    lineView.layer.borderColor = [UIColor whiteColor].CGColor;
-//    lineView.layer.borderWidth = 2.0f;
-//    [_foregroundScrollView addSubview:lineView];
-    
-    
-    // Setup the third page
-    UIImageView* playTogether = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"playTogether.png"]];
-    playTogether.contentMode = UIViewContentModeScaleAspectFit;
-    playTogether.frame = CGRectMake(0, 0, self.view.bounds.size.width-20, self.view.bounds.size.height);
-    playTogether.center = CGPointMake(self.view.bounds.size.width*(2)+self.view.bounds.size.width/2-12, self.view.bounds.size.height/2-50);
-    [_foregroundScrollView addSubview:playTogether];
 
+    UIButton* record2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    record2.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
+    record2.frame = CGRectMake(0, 0, 280, 50);
+    record2.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
+    [record2 addTarget:self action:@selector(recordSecond:) forControlEvents:UIControlEventTouchUpInside];
     
-    
-    // Setup the fourth page
-    UIImageView* chatWherever = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"chatWherever.png"]];
-    chatWherever.contentMode = UIViewContentModeScaleAspectFill;
-    chatWherever.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
-    chatWherever.center = CGPointMake(self.view.bounds.size.width*(3)+self.view.bounds.size.width/2, self.view.bounds.size.height/2);
-    [_foregroundScrollView addSubview:chatWherever];
+    UILabel* buttonText2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, record2.frame.size.width, record2.frame.size.height)];
+    buttonText2.center = CGPointMake(record2.frame.size.width/2, record2.frame.size.height/2);
+    buttonText2.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:45.0f];
+    buttonText2.text = @"Record Second";
+    buttonText2.textColor = [UIColor whiteColor];
+    buttonText2.textAlignment = UITextAlignmentCenter;
+    buttonText2.backgroundColor = [UIColor clearColor];
+    [record2 addSubview:buttonText2];
+    [_foregroundScrollView addSubview:record2];
         
-    // Setup the fifth (final) page
-    UIImageView* logo2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"2plusLogo.png"]];
-    logo2.contentMode = UIViewContentModeScaleAspectFit;
-    logo2.center = CGPointMake(self.view.bounds.size.width*(kNumberOfIntroPages-1)+self.view.bounds.size.width/2 + 10, 100);
-    [_foregroundScrollView addSubview:logo2];
+    // Setup the third page
+    UIButton* merge = [UIButton buttonWithType:UIButtonTypeCustom];
+    merge.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
+    merge.frame = CGRectMake(0, 0, 280, 50);
+    merge.center = CGPointMake(self.view.bounds.size.width*(2)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
+    [merge addTarget:self action:@selector(mergeAndSave:) forControlEvents:UIControlEventTouchUpInside];
     
-    _getStartedButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _getStartedButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
-    _getStartedButton.frame = CGRectMake(0, 0, 280, 50);
-    _getStartedButton.center = CGPointMake(self.view.bounds.size.width*(kNumberOfIntroPages-1)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
-    [_getStartedButton addTarget:self action:@selector(getStarted:) forControlEvents:UIControlEventTouchUpInside];
-    [_getStartedButton addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchDown];
-    [_getStartedButton addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchDragOutside];
-    [_getStartedButton addTarget:self action:@selector(buttonCancel:) forControlEvents:UIControlEventTouchCancel];
+    UILabel* buttonText3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, merge.frame.size.width, merge.frame.size.height)];
+    buttonText3.center = CGPointMake(merge.frame.size.width/2, merge.frame.size.height/2);
+    buttonText3.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:45.0f];
+    buttonText3.text = @"Get Shakin!";
+    buttonText3.textColor = [UIColor whiteColor];
+    buttonText3.textAlignment = UITextAlignmentCenter;
+    buttonText3.backgroundColor = [UIColor clearColor];
+    [merge addSubview:buttonText3];
+    [_foregroundScrollView addSubview:merge];
     
-    _getStartedButton.clipsToBounds = YES;
-    _getStartedButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    _getStartedButton.layer.borderWidth = 3.0;
-    _getStartedButton.layer.cornerRadius = 10.0f;
-    
-    UIView* shadow = [[UIView alloc] initWithFrame:_getStartedButton.frame];
-    shadow.backgroundColor = [UIColor whiteColor];
-    shadow.layer.cornerRadius = _getStartedButton.layer.cornerRadius;
-    shadow.layer.shadowColor = [UIColor blackColor].CGColor;
-    shadow.layer.shadowRadius = 2.0f;
-    shadow.layer.shadowOffset = CGSizeMake(1,1);
-    shadow.layer.shadowOpacity = 0.5f;
-    
-    UILabel* buttonText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _getStartedButton.frame.size.width, _getStartedButton.frame.size.height)];
-    buttonText.center = CGPointMake(_getStartedButton.frame.size.width/2, _getStartedButton.frame.size.height/2);
-    buttonText.font = [UIFont fontWithName:@"where stars shine the brightest" size:45.0f];
-    buttonText.text = @"Get started!";
-    buttonText.textColor = [UIColor whiteColor];
-    buttonText.textAlignment = UITextAlignmentCenter;
-    buttonText.backgroundColor = [UIColor clearColor];
-    
-    FlexibleGradientView* whiteGradientOverlay = [[FlexibleGradientView alloc] initWithFrame:buttonText.frame andViewToPassthroughTo:_getStartedButton];
-    whiteGradientOverlay.alpha = 0.4;
-    whiteGradientOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [(CAGradientLayer*)[whiteGradientOverlay layer] setColors:[NSArray arrayWithObjects:(id)[[UIColor whiteColor] CGColor], (id)[[UIColor clearColor] CGColor], nil]];
-    
-    _getStartedButtonDepressedOverlay = [[FlexibleGradientView alloc] initWithFrame:buttonText.frame andViewToPassthroughTo:_getStartedButton];
-    _getStartedButtonDepressedOverlay.alpha = 0.6;
-    _getStartedButtonDepressedOverlay.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [(CAGradientLayer*)[_getStartedButtonDepressedOverlay layer] setColors:[NSArray arrayWithObjects:(id)[[UIColor blackColor] CGColor], (id)[[UIColor clearColor] CGColor], nil]];
-    _getStartedButtonDepressedOverlay.hidden = YES;
-    
-    [_getStartedButton addSubview:buttonText];
-    [_getStartedButton addSubview:whiteGradientOverlay];
-    [_getStartedButton addSubview:_getStartedButtonDepressedOverlay];
-    
-    [_foregroundScrollView addSubview:shadow];
-    [_foregroundScrollView addSubview:_getStartedButton];
 }
 
 
@@ -290,21 +244,17 @@
     [self.delegate introCompleted:self];
 }
 
-- (void)buttonDown:(UIButton*)button
-{
-    _getStartedButtonDepressedOverlay.hidden = NO;
+- (void)recordFirst:(UIButton*)button {
+    first = YES;
+    [self startCameraControllerFromViewController:self usingDelegate:self];
 }
 
-- (void)buttonCancel:(UIButton*)button
-{
-    _getStartedButtonDepressedOverlay.hidden = YES;
+- (void)recordSecond:(UIButton*)button {
+    first = NO;
+    [self startCameraControllerFromViewController:self usingDelegate:self];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([segue.identifier isEqualToString:@"Signup"]) {
-        
-    }
-}
+
 -(NSUInteger) supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait;
 }
@@ -326,6 +276,195 @@
 {
     NSNumber* val = [[NSUserDefaults standardUserDefaults] objectForKey:kIntroVersionFinished];
     return val.intValue >= kCurrentIntroVersion;
+}
+
+
+
+- (BOOL) startCameraControllerFromViewController: (UIViewController*) controller
+                                   usingDelegate: (id <UIImagePickerControllerDelegate,
+                                                   UINavigationControllerDelegate>) delegate {
+    
+    if (([UIImagePickerController isSourceTypeAvailable:
+          UIImagePickerControllerSourceTypeCamera] == NO)
+        || (delegate == nil)
+        || (controller == nil))
+        return NO;
+    
+    
+    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    // Displays a control that allows the user to choose movie capture
+    cameraUI.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeMovie, nil];
+    
+    // Hides the controls for moving & scaling pictures, or for
+    // trimming movies. To instead show the controls, use YES.
+    cameraUI.allowsEditing = NO;
+    
+    cameraUI.delegate = delegate;
+    
+    [controller presentModalViewController: cameraUI animated: YES];
+    return YES;
+}
+
+
+// For responding to the user accepting a newly-captured picture or movie
+- (void) imagePickerController: (UIImagePickerController *) picker
+ didFinishPickingMediaWithInfo: (NSDictionary *) info {
+    
+    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
+    
+    [self dismissModalViewControllerAnimated:NO];
+    
+    // Handle a movie capture
+    if (CFStringCompare ((__bridge_retained CFStringRef) mediaType, kUTTypeMovie, 0)
+        == kCFCompareEqualTo) {
+        
+        NSString *moviePath = [[info objectForKey:
+                                UIImagePickerControllerMediaURL] path];
+        if(first) {
+            firstVideoPath = moviePath;
+        }
+        else {
+            secondVideoPath = moviePath;
+        }
+        
+        /*if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
+            UISaveVideoAtPathToSavedPhotosAlbum (moviePath,self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+        }*/
+        
+        
+    }
+}
+
+
+
+- (void) mergeAndSave:(UIButton*)button{
+    firstAsset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:firstVideoPath] options:nil];
+    secondAsset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:secondVideoPath] options:nil];
+    
+    if(firstAsset !=nil && secondAsset!=nil){
+        //[ActivityView startAnimating];
+        //Create AVMutableComposition Object.This object will hold our multiple AVMutableCompositionTrack.
+        AVMutableComposition* mixComposition = [[AVMutableComposition alloc] init];
+        
+        //VIDEO TRACK
+        AVMutableCompositionTrack *firstTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+        [firstTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, firstAsset.duration) ofTrack:[[firstAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:kCMTimeZero error:nil];
+        
+        AVMutableCompositionTrack *secondTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+        [secondTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, secondAsset.duration) ofTrack:[[secondAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:firstAsset.duration error:nil];
+        
+        //AUDIO TRACK
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake"
+                                                                  ofType: @"mp3"];
+        NSURL* songURL = [NSURL fileURLWithPath:soundFilePath];
+        AVAsset *audioAsset = [AVAsset assetWithURL:songURL];
+        
+        if(audioAsset!=nil){
+            AVMutableCompositionTrack *AudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+            NSArray* test = [audioAsset tracksWithMediaType:AVMediaTypeAudio];
+            [AudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(firstAsset.duration, secondAsset.duration)) ofTrack:[test objectAtIndex:0] atTime:kCMTimeZero error:nil];
+        }
+        
+        AVMutableVideoCompositionInstruction * MainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+        MainInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeAdd(firstAsset.duration, secondAsset.duration));
+        
+        //FIXING ORIENTATION//
+        AVMutableVideoCompositionLayerInstruction *FirstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:firstTrack];
+        AVAssetTrack *FirstAssetTrack = [[firstAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+        UIImageOrientation FirstAssetOrientation_  = UIImageOrientationUp;
+        BOOL  isFirstAssetPortrait_  = NO;
+        CGAffineTransform firstTransform = FirstAssetTrack.preferredTransform;
+        if(firstTransform.a == 0 && firstTransform.b == 1.0 && firstTransform.c == -1.0 && firstTransform.d == 0)  {FirstAssetOrientation_= UIImageOrientationRight; isFirstAssetPortrait_ = YES;}
+        if(firstTransform.a == 0 && firstTransform.b == -1.0 && firstTransform.c == 1.0 && firstTransform.d == 0)  {FirstAssetOrientation_ =  UIImageOrientationLeft; isFirstAssetPortrait_ = YES;}
+        if(firstTransform.a == 1.0 && firstTransform.b == 0 && firstTransform.c == 0 && firstTransform.d == 1.0)   {FirstAssetOrientation_ =  UIImageOrientationUp;}
+        if(firstTransform.a == -1.0 && firstTransform.b == 0 && firstTransform.c == 0 && firstTransform.d == -1.0) {FirstAssetOrientation_ = UIImageOrientationDown;}
+        CGFloat FirstAssetScaleToFitRatio = 320.0/FirstAssetTrack.naturalSize.width;
+        if(isFirstAssetPortrait_){
+            FirstAssetScaleToFitRatio = 320.0/FirstAssetTrack.naturalSize.height;
+            CGAffineTransform FirstAssetScaleFactor = CGAffineTransformMakeScale(FirstAssetScaleToFitRatio,FirstAssetScaleToFitRatio);
+            [FirstlayerInstruction setTransform:CGAffineTransformConcat(FirstAssetTrack.preferredTransform, FirstAssetScaleFactor) atTime:kCMTimeZero];
+        }else{
+            CGAffineTransform FirstAssetScaleFactor = CGAffineTransformMakeScale(FirstAssetScaleToFitRatio,FirstAssetScaleToFitRatio);
+            [FirstlayerInstruction setTransform:CGAffineTransformConcat(CGAffineTransformConcat(FirstAssetTrack.preferredTransform, FirstAssetScaleFactor),CGAffineTransformMakeTranslation(0, 160)) atTime:kCMTimeZero];
+        }
+        [FirstlayerInstruction setOpacity:0.0 atTime:firstAsset.duration];
+        
+        AVMutableVideoCompositionLayerInstruction *SecondlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:secondTrack];
+        AVAssetTrack *SecondAssetTrack = [[secondAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+        UIImageOrientation SecondAssetOrientation_  = UIImageOrientationUp;
+        BOOL  isSecondAssetPortrait_  = NO;
+        CGAffineTransform secondTransform = SecondAssetTrack.preferredTransform;
+        if(secondTransform.a == 0 && secondTransform.b == 1.0 && secondTransform.c == -1.0 && secondTransform.d == 0)  {SecondAssetOrientation_= UIImageOrientationRight; isSecondAssetPortrait_ = YES;}
+        if(secondTransform.a == 0 && secondTransform.b == -1.0 && secondTransform.c == 1.0 && secondTransform.d == 0)  {SecondAssetOrientation_ =  UIImageOrientationLeft; isSecondAssetPortrait_ = YES;}
+        if(secondTransform.a == 1.0 && secondTransform.b == 0 && secondTransform.c == 0 && secondTransform.d == 1.0)   {SecondAssetOrientation_ =  UIImageOrientationUp;}
+        if(secondTransform.a == -1.0 && secondTransform.b == 0 && secondTransform.c == 0 && secondTransform.d == -1.0) {SecondAssetOrientation_ = UIImageOrientationDown;}
+        CGFloat SecondAssetScaleToFitRatio = 320.0/SecondAssetTrack.naturalSize.width;
+        if(isSecondAssetPortrait_){
+            SecondAssetScaleToFitRatio = 320.0/SecondAssetTrack.naturalSize.height;
+            CGAffineTransform SecondAssetScaleFactor = CGAffineTransformMakeScale(SecondAssetScaleToFitRatio,SecondAssetScaleToFitRatio);
+            [SecondlayerInstruction setTransform:CGAffineTransformConcat(SecondAssetTrack.preferredTransform, SecondAssetScaleFactor) atTime:firstAsset.duration];
+        }else{
+            ;
+            CGAffineTransform SecondAssetScaleFactor = CGAffineTransformMakeScale(SecondAssetScaleToFitRatio,SecondAssetScaleToFitRatio);
+            [SecondlayerInstruction setTransform:CGAffineTransformConcat(CGAffineTransformConcat(SecondAssetTrack.preferredTransform, SecondAssetScaleFactor),CGAffineTransformMakeTranslation(0, 160)) atTime:firstAsset.duration];
+        }
+        
+        
+        MainInstruction.layerInstructions = [NSArray arrayWithObjects:FirstlayerInstruction,SecondlayerInstruction,nil];;
+        
+        AVMutableVideoComposition *MainCompositionInst = [AVMutableVideoComposition videoComposition];
+        MainCompositionInst.instructions = [NSArray arrayWithObject:MainInstruction];
+        MainCompositionInst.frameDuration = CMTimeMake(1, 30);
+        MainCompositionInst.renderSize = CGSizeMake(320.0, 480.0);
+        
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"mergeVideo-%d.mov",arc4random() % 1000]];
+        
+        NSURL *url = [NSURL fileURLWithPath:myPathDocs];
+        
+        AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetHighestQuality];
+        exporter.outputURL=url;
+        exporter.outputFileType = AVFileTypeQuickTimeMovie;
+        exporter.videoComposition = MainCompositionInst;
+        exporter.shouldOptimizeForNetworkUse = YES;
+        [exporter exportAsynchronouslyWithCompletionHandler:^
+         {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [self exportDidFinish:exporter];
+             });
+         }];
+    }
+}
+- (void)exportDidFinish:(AVAssetExportSession*)session
+{
+    if(session.status == AVAssetExportSessionStatusCompleted){
+        NSURL *outputURL = session.outputURL;
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:outputURL]) {
+            [library writeVideoAtPathToSavedPhotosAlbum:outputURL
+                                        completionBlock:^(NSURL *assetURL, NSError *error){
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                if (error) {
+                                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed"  delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil, nil];
+                                                    [alert show];
+                                                }else{
+                                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album"  delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+                                                    [alert show];
+                                                }
+                                                
+                                            });
+                                            
+                                        }];
+        }
+    }
+	
+    //audioAsset = nil;
+    firstAsset = nil;
+    secondAsset = nil;
+    //[ActivityView stopAnimating];
 }
 
 @end

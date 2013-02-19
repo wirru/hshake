@@ -114,6 +114,8 @@
 		F14F09DC155A4DF000FE8EF5 /* VideoPlayRecord */ = {
 			isa = PBXGroup;
 			children = (
+				F7B2F62416D41726006C4349 /* hshake.mp3 */,
+				F7B2F62616D41874006C4349 /* hshake2.mp3 */,
 				F7B2F61F16D40FED006C4349 /* assets */,
 				F14F09E5155A4DF000FE8EF5 /* AppDelegate.h */,
 				F14F09E6155A4DF000FE8EF5 /* AppDelegate.m */,
@@ -145,8 +147,6 @@
 		F7B2F61F16D40FED006C4349 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				F7B2F62416D41726006C4349 /* hshake.mp3 */,
-				F7B2F62616D41874006C4349 /* hshake2.mp3 */,
 			);
 			name = assets;
 			sourceTree = "<group>";

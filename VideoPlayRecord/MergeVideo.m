@@ -84,9 +84,9 @@
 //    [self presentModalViewController:mediaPicker animated:YES];
 //    
     
-    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake2"
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake"
                                     ofType: @"mp3"];
-    NSURL* songURL = [NSURL URLWithString:soundFilePath];
+    NSURL* songURL = [NSURL fileURLWithPath:soundFilePath];
     audioAsset = [AVAsset assetWithURL:songURL];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Asset Loaded" message:@"Audio Loaded"  delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil, nil];
     [alert show];

@@ -24,6 +24,7 @@
 		F14F0A07155A561600FE8EF5 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F14F0A06155A561500FE8EF5 /* AssetsLibrary.framework */; };
 		F14F0A09155A562000FE8EF5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F14F0A08155A562000FE8EF5 /* MediaPlayer.framework */; };
 		F14F0A0B155A562800FE8EF5 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F14F0A0A155A562800FE8EF5 /* MobileCoreServices.framework */; };
+		F7B2F62116D40FFD006C4349 /* hshake.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F7B2F62016D40FFD006C4349 /* hshake.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		F14F0A06155A561500FE8EF5 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		F14F0A08155A562000FE8EF5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F14F0A0A155A562800FE8EF5 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		F7B2F62016D40FFD006C4349 /* hshake.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = hshake.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 		F14F09DC155A4DF000FE8EF5 /* VideoPlayRecord */ = {
 			isa = PBXGroup;
 			children = (
+				F7B2F61F16D40FED006C4349 /* assets */,
 				F14F09E5155A4DF000FE8EF5 /* AppDelegate.h */,
 				F14F09E6155A4DF000FE8EF5 /* AppDelegate.m */,
 				F14F09E8155A4DF000FE8EF5 /* MainStoryboard.storyboard */,
@@ -135,6 +138,14 @@
 				F14F09E4155A4DF000FE8EF5 /* VideoPlayRecord-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F7B2F61F16D40FED006C4349 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				F7B2F62016D40FFD006C4349 /* hshake.m4a */,
+			);
+			name = assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -190,6 +201,7 @@
 			files = (
 				F14F09E1155A4DF000FE8EF5 /* InfoPlist.strings in Resources */,
 				F14F09EA155A4DF000FE8EF5 /* MainStoryboard.storyboard in Resources */,
+				F7B2F62116D40FFD006C4349 /* hshake.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

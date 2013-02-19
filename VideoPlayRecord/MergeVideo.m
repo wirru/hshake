@@ -84,7 +84,7 @@
 //    [self presentModalViewController:mediaPicker animated:YES];
 //    
     
-    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake"
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake2"
                                     ofType: @"mp3"];
     NSURL* songURL = [NSURL URLWithString:soundFilePath];
     audioAsset = [AVAsset assetWithURL:songURL];

@@ -78,27 +78,36 @@
 }
 
 - (IBAction)LoadAudio:(id)sender{
-    MPMediaPickerController *mediaPicker = [[MPMediaPickerController alloc] initWithMediaTypes: MPMediaTypeAny];
-    mediaPicker.delegate = self;
-    mediaPicker.prompt = @"Select Audio";
-    [self presentModalViewController:mediaPicker animated:YES];
+//    MPMediaPickerController *mediaPicker = [[MPMediaPickerController alloc] initWithMediaTypes: MPMediaTypeAny];
+//    mediaPicker.delegate = self;
+//    mediaPicker.prompt = @"Select Audio";
+//    [self presentModalViewController:mediaPicker animated:YES];
+//    
+    
+    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake"
+                                    ofType: @"mp3"];
+    NSURL* songURL = [NSURL URLWithString:soundFilePath];
+    audioAsset = [AVAsset assetWithURL:songURL];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Asset Loaded" message:@"Audio Loaded"  delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil, nil];
+    [alert show];
+    
 }
 
 
 - (void) mediaPicker: (MPMediaPickerController *) mediaPicker didPickMediaItems: (MPMediaItemCollection *) mediaItemCollection
 {
-    NSArray * SelectedSong = [mediaItemCollection items];
-    if([SelectedSong count]>0){
-        MPMediaItem * SongItem = [SelectedSong objectAtIndex:0];
-        NSURL *SongURL = [SongItem valueForProperty: MPMediaItemPropertyAssetURL];
-        
-        audioAsset = [AVAsset assetWithURL:SongURL];
-         NSLog(@"Audio Loaded");
-         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Asset Loaded" message:@"Audio Loaded"  delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil, nil];
-         [alert show];
-    }
-    
-    [self dismissModalViewControllerAnimated: YES];
+//    NSArray * SelectedSong = [mediaItemCollection items];
+//    if([SelectedSong count]>0){
+//        MPMediaItem * SongItem = [SelectedSong objectAtIndex:0];
+//        NSURL *SongURL = [SongItem valueForProperty: MPMediaItemPropertyAssetURL];
+//        
+//        audioAsset = [AVAsset assetWithURL:SongURL];
+//         NSLog(@"Audio Loaded");
+//         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Asset Loaded" message:@"Audio Loaded"  delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil, nil];
+//         [alert show];
+//    }
+//    
+//    [self dismissModalViewControllerAnimated: YES];
 }
 - (void) mediaPickerDidCancel: (MPMediaPickerController *) mediaPicker
 {
@@ -171,7 +180,8 @@
         //AUDIO TRACK
         if(audioAsset!=nil){
             AVMutableCompositionTrack *AudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-            [AudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(firstAsset.duration, secondAsset.duration)) ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:kCMTimeZero error:nil];
+            NSArray* test = [audioAsset tracksWithMediaType:AVMediaTypeAudio];
+            [AudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(firstAsset.duration, secondAsset.duration)) ofTrack:[test objectAtIndex:0] atTime:kCMTimeZero error:nil];
         } 
         
         AVMutableVideoCompositionInstruction * MainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];

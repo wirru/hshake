@@ -300,6 +300,8 @@
     // Hides the controls for moving & scaling pictures, or for
     // trimming movies. To instead show the controls, use YES.
     cameraUI.allowsEditing = NO;
+    cameraUI.videoMaximumDuration = 15.0f;
+    
     
     cameraUI.delegate = delegate;
     

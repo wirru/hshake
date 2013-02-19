@@ -331,6 +331,9 @@
             secondVideoPath = moviePath;
         }
         
+        CGPoint offset = _foregroundScrollView.contentOffset;
+        offset.x += _foregroundScrollView.bounds.size.width;
+        [_foregroundScrollView setContentOffset:offset animated:YES];
         /*if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum (moviePath)) {
             UISaveVideoAtPathToSavedPhotosAlbum (moviePath,self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
         }*/
@@ -464,6 +467,8 @@
     }
 	
     //audioAsset = nil;
+    firstVideoPath = nil;
+    secondVideoPath = nil;
     firstAsset = nil;
     secondAsset = nil;
     //[ActivityView stopAnimating];

@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "IntroductionViewController.h"
 
 @implementation ViewController
 
@@ -39,6 +40,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    IntroductionViewController* introVC = [[IntroductionViewController alloc] init];
+    introVC.delegate = self;
+    [self presentViewController:introVC animated:YES completion:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

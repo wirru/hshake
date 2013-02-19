@@ -82,14 +82,7 @@
 //    mediaPicker.delegate = self;
 //    mediaPicker.prompt = @"Select Audio";
 //    [self presentModalViewController:mediaPicker animated:YES];
-//    
-    
-    NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake"
-                                    ofType: @"mp3"];
-    NSURL* songURL = [NSURL fileURLWithPath:soundFilePath];
-    audioAsset = [AVAsset assetWithURL:songURL];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Asset Loaded" message:@"Audio Loaded"  delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil, nil];
-    [alert show];
+//
     
 }
 
@@ -178,6 +171,11 @@
         [secondTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, secondAsset.duration) ofTrack:[[secondAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:firstAsset.duration error:nil];
         
         //AUDIO TRACK
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake"
+                                                                  ofType: @"mp3"];
+        NSURL* songURL = [NSURL fileURLWithPath:soundFilePath];
+        audioAsset = [AVAsset assetWithURL:songURL];
+        
         if(audioAsset!=nil){
             AVMutableCompositionTrack *AudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
             NSArray* test = [audioAsset tracksWithMediaType:AVMediaTypeAudio];

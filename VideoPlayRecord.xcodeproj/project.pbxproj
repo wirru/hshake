@@ -279,12 +279,12 @@
 		F14F09F1155A4DF000FE8EF5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Abdul Aleem Khan (F9AZ3G73GR)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VideoPlayRecord/VideoPlayRecord-Prefix.pch";
 				INFOPLIST_FILE = "VideoPlayRecord/VideoPlayRecord-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "69572C71-8883-460A-B27B-E71B2CC8950E";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -292,12 +292,12 @@
 		F14F09F2155A4DF000FE8EF5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Abdul Aleem Khan (F9AZ3G73GR)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VideoPlayRecord/VideoPlayRecord-Prefix.pch";
 				INFOPLIST_FILE = "VideoPlayRecord/VideoPlayRecord-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "69572C71-8883-460A-B27B-E71B2CC8950E";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

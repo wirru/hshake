@@ -558,6 +558,8 @@
                                                 }else{
                                                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album"  delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
                                                     [alert show];
+                                                    
+                                                    [self dismissModalViewControllerAnimated:YES];
                                                 }
                                                 
                                             });

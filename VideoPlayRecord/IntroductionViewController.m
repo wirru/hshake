@@ -194,15 +194,20 @@
     firstLabel.textAlignment = NSTextAlignmentCenter;
     [_foregroundScrollView addSubview:firstLabel];
     
+    UIView* firstVideoFrame = [UIView new];
+    firstVideoFrame.frame = CGRectMake(10, 200, 300, 160);
+    firstVideoFrame.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.5f];
+    [_foregroundScrollView addSubview:firstVideoFrame];
+    
     firstVideoPreview = [[UIImageView alloc] init];
-    firstVideoPreview.frame = CGRectMake(0, 0, 320, 180);
-    firstVideoPreview.center = CGPointMake(self.view.bounds.size.width/2, 200);
-    firstVideoPreview.contentMode = UIViewContentModeScaleAspectFill;
+    firstVideoPreview.frame = CGRectMake(0, 0, 300, 160);
+    firstVideoPreview.contentMode = UIViewContentModeScaleAspectFit;
+    firstVideoPreview.clipsToBounds = YES;
     firstVideoPreview.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tapFirstVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playFirstMovie)];
+    UITapGestureRecognizer *tapFirstVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFirstMovie)];
     [firstVideoPreview addGestureRecognizer:tapFirstVideoGesture];
     
-    [_foregroundScrollView addSubview:firstVideoPreview];
+    [firstVideoFrame addSubview:firstVideoPreview];
     
     
     recordFirstButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -219,7 +224,7 @@
     buttonText1.textAlignment = UITextAlignmentCenter;
     buttonText1.backgroundColor = [UIColor clearColor];
     [recordFirstButton addSubview:buttonText1];
-    [_foregroundScrollView addSubview:recordFirstButton];
+    //[_foregroundScrollView addSubview:recordFirstButton];
     
     
     // Setup the second page
@@ -243,14 +248,19 @@
     secondLabel.textAlignment = NSTextAlignmentCenter;
     [_foregroundScrollView addSubview:secondLabel];
     
+    UIView* secondVideoFrame = [UIView new];
+    secondVideoFrame.frame = CGRectMake(330, 200, 300, 160);
+    secondVideoFrame.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.5f];
+    [_foregroundScrollView addSubview:secondVideoFrame];
+    
     secondVideoPreview = [[UIImageView alloc] init];
-    secondVideoPreview.frame = CGRectMake(0, 0, 320, 180);
-    secondVideoPreview.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2, 200);
+    secondVideoPreview.frame = CGRectMake(0, 0, 300, 160);
     secondVideoPreview.contentMode = UIViewContentModeScaleAspectFill;
     secondVideoPreview.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tapSecondVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playSecondMovie)];
+    secondVideoPreview.clipsToBounds = YES;
+    UITapGestureRecognizer *tapSecondVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapSecondMovie)];
     [secondVideoPreview addGestureRecognizer:tapSecondVideoGesture];
-    [_foregroundScrollView addSubview:secondVideoPreview];
+    [secondVideoFrame addSubview:secondVideoPreview];
     
     recordSecondButton = [UIButton buttonWithType:UIButtonTypeCustom];
     recordSecondButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
@@ -266,7 +276,7 @@
     buttonText2.textAlignment = UITextAlignmentCenter;
     buttonText2.backgroundColor = [UIColor clearColor];
     [recordSecondButton addSubview:buttonText2];
-    [_foregroundScrollView addSubview:recordSecondButton];
+    //[_foregroundScrollView addSubview:recordSecondButton];
     
         
     // Setup the third page
@@ -361,10 +371,6 @@
     [self.delegate introCompleted:self];
 }
 
-- (void)recordFirst:(UIButton*)button {
-    first = YES;
-    [self startCameraControllerFromViewController:self usingDelegate:self];
-}
 
 - (void)recordSecond:(UIButton*)button {
     first = NO;
@@ -454,10 +460,11 @@
             CGImageRelease(image);
             
             firstVideoPreview.image = thumb;
+            
         }
         else {
             secondAsset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:moviePath] options:nil];
-            AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:firstAsset];
+            AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:secondAsset];
             gen.appliesPreferredTrackTransform = YES;
             CMTime time = CMTimeMakeWithSeconds(0.0, 600);
             NSError *error = nil;
@@ -626,15 +633,25 @@
     secondAsset = nil;
 }
 
-- (void)playFirstMovie {
+
+- (void)tapFirstMovie {
     if(firstAsset != nil) {
         [self playMovie:firstAsset];
     }
+    else {
+        first = YES;
+        [self startCameraControllerFromViewController:self usingDelegate:self];
+    }
 }
 
-- (void)playSecondMovie {
+- (void)tapSecondMovie {
     if(secondAsset != nil) {
         [self playMovie:secondAsset];
+    }
+    else {
+        first = NO;
+        [self startCameraControllerFromViewController:self usingDelegate:self];
+
     }
 }
 

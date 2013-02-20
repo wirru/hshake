@@ -299,36 +299,26 @@
     finalLabel.textAlignment = NSTextAlignmentCenter;
     [_foregroundScrollView addSubview:finalLabel];
     
+    UIView* finalVideoFrame = [UIView new];
+    finalVideoFrame.frame = CGRectMake(650, 200, 300, 160);
+    finalVideoFrame.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.5f];
+    [_foregroundScrollView addSubview:finalVideoFrame];
+    
+    
     finalVideoPreview = [[UIImageView alloc] init];
-    finalVideoPreview.frame = CGRectMake(0, 0, 320, 180);
-    finalVideoPreview.center = CGPointMake(self.view.bounds.size.width*(2)+self.view.bounds.size.width/2, 200);
+    finalVideoPreview.frame = CGRectMake(0, 0, 300, 160);
     finalVideoPreview.contentMode = UIViewContentModeScaleAspectFill;
+    finalVideoPreview.clipsToBounds = YES;
     finalVideoPreview.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tapFinalVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playFinalMovie)];
+    UITapGestureRecognizer *tapFinalVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFinalMovie)];
     [finalVideoPreview addGestureRecognizer:tapFinalVideoGesture];
-    [_foregroundScrollView addSubview:finalVideoPreview];
+    [finalVideoFrame addSubview:finalVideoPreview];
     
-    mergeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    mergeButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
-    mergeButton.frame = CGRectMake(0, 0, 280, 50);
-    mergeButton.center = CGPointMake(self.view.bounds.size.width*(2)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
-    [mergeButton addTarget:self action:@selector(mergeAndSave:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UILabel* buttonText3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, mergeButton.frame.size.width, mergeButton.frame.size.height)];
-    buttonText3.center = CGPointMake(mergeButton.frame.size.width/2, mergeButton.frame.size.height/2);
-    buttonText3.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:25.0f];
-    buttonText3.text = @"Get Shakin!";
-    buttonText3.textColor = [UIColor whiteColor];
-    buttonText3.textAlignment = UITextAlignmentCenter;
-    buttonText3.backgroundColor = [UIColor clearColor];
-    [mergeButton addSubview:buttonText3];
-    [_foregroundScrollView addSubview:mergeButton];
     
     
     saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     saveButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
-    saveButton.frame = CGRectMake(0, 0, 280, 50);
-    saveButton.center = CGPointMake(self.view.bounds.size.width*(2)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2 + 60);
+    saveButton.frame = CGRectMake(660, 370, 280, 50);
     [saveButton addTarget:self action:@selector(exportDidFinish:) forControlEvents:UIControlEventTouchUpInside];
     
     UILabel* saveButtonText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, saveButton.frame.size.width, saveButton.frame.size.height)];
@@ -490,88 +480,6 @@
 
 
 
-- (void) mergeAndSave:(UIButton*)button{
-    
-    if(firstAsset !=nil && secondAsset!=nil){
-        //[ActivityView startAnimating];
-        //Create AVMutableComposition Object.This object will hold our multiple AVMutableCompositionTrack.
-        AVMutableComposition* mixComposition = [[AVMutableComposition alloc] init];
-        
-        //VIDEO TRACK
-        AVMutableCompositionTrack *firstTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-        [firstTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, firstAsset.duration) ofTrack:[[firstAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:kCMTimeZero error:nil];
-        
-        AVMutableCompositionTrack *secondTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-        [secondTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, secondAsset.duration) ofTrack:[[secondAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:firstAsset.duration error:nil];
-        
-        //AUDIO TRACK
-        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake"
-                                                                  ofType: @"mp3"];
-        NSURL* songURL = [NSURL fileURLWithPath:soundFilePath];
-        AVAsset *audioAsset = [AVAsset assetWithURL:songURL];
-        
-        if(audioAsset!=nil){
-            AVMutableCompositionTrack *AudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-            NSArray* test = [audioAsset tracksWithMediaType:AVMediaTypeAudio];
-            [AudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(firstAsset.duration, secondAsset.duration)) ofTrack:[test objectAtIndex:0] atTime:kCMTimeZero error:nil];
-        }
-        
-        AVMutableVideoCompositionInstruction * MainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-        MainInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeAdd(firstAsset.duration, secondAsset.duration));
-        
-        //FIXING ORIENTATION//
-        AVMutableVideoCompositionLayerInstruction *FirstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:firstTrack];
-
-        [FirstlayerInstruction setOpacity:0.0 atTime:firstAsset.duration];
-        
-        AVMutableVideoCompositionLayerInstruction *SecondlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:secondTrack];
-        
-        MainInstruction.layerInstructions = [NSArray arrayWithObjects:FirstlayerInstruction,SecondlayerInstruction,nil];;
-        
-        AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
-        videoComposition.renderSize = CGSizeMake(firstAsset.naturalSize.width, firstAsset.naturalSize.height);
-        videoComposition.frameDuration = CMTimeMake(1, 30);
-        
-        AVMutableVideoComposition *MainCompositionInst = [AVMutableVideoComposition videoComposition];
-        MainCompositionInst.instructions = [NSArray arrayWithObject:MainInstruction];
-        MainCompositionInst.frameDuration = CMTimeMake(1, 30);
-        MainCompositionInst.renderSize = CGSizeMake(firstAsset.naturalSize.width, firstAsset.naturalSize.height);
-        
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
-        NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"mergeVideo-%d.mov",arc4random() % 1000]];
-        
-        NSURL *url = [NSURL fileURLWithPath:myPathDocs];
-        
-        exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetHighestQuality];
-        exporter.outputURL=url;
-        exporter.outputFileType = AVFileTypeQuickTimeMovie;
-        exporter.videoComposition = MainCompositionInst;
-        exporter.shouldOptimizeForNetworkUse = YES;
-        [exporter exportAsynchronouslyWithCompletionHandler:^
-         {
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 
-                 finalAsset = [[AVURLAsset alloc] initWithURL:url options:nil];
-                 
-                 AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:finalAsset];
-                 gen.appliesPreferredTrackTransform = YES;
-                 CMTime time = CMTimeMakeWithSeconds(0.0, 600);
-                 NSError *error = nil;
-                 CMTime actualTime;
-                 
-                 CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
-                 UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
-                 CGImageRelease(image);
-                 
-                 finalVideoPreview.image = thumb;
-                 saveButton.hidden = NO;
-                 //[self exportDidFinish:exporter];
-             });
-         }];
-    }
-}
-
 - (void)exportDidFinish:(UIButton*)button
 {
     AVAssetExportSession* session = exporter;
@@ -624,9 +532,90 @@
     }
 }
 
-- (void)playFinalMovie {
+- (void)tapFinalMovie {
     if(finalAsset != nil) {
         [self playMovie:finalAsset];
+    }
+    else {
+        if(firstAsset !=nil && secondAsset!=nil){
+            //[ActivityView startAnimating];
+            //Create AVMutableComposition Object.This object will hold our multiple AVMutableCompositionTrack.
+            AVMutableComposition* mixComposition = [[AVMutableComposition alloc] init];
+            
+            //VIDEO TRACK
+            AVMutableCompositionTrack *firstTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+            [firstTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, firstAsset.duration) ofTrack:[[firstAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:kCMTimeZero error:nil];
+            
+            AVMutableCompositionTrack *secondTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+            [secondTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, secondAsset.duration) ofTrack:[[secondAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:firstAsset.duration error:nil];
+            
+            //AUDIO TRACK
+            NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake"
+                                                                      ofType: @"mp3"];
+            NSURL* songURL = [NSURL fileURLWithPath:soundFilePath];
+            AVAsset *audioAsset = [AVAsset assetWithURL:songURL];
+            
+            if(audioAsset!=nil){
+                AVMutableCompositionTrack *AudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+                NSArray* test = [audioAsset tracksWithMediaType:AVMediaTypeAudio];
+                [AudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(firstAsset.duration, secondAsset.duration)) ofTrack:[test objectAtIndex:0] atTime:kCMTimeZero error:nil];
+            }
+            
+            AVMutableVideoCompositionInstruction * MainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+            MainInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeAdd(firstAsset.duration, secondAsset.duration));
+            
+            //FIXING ORIENTATION//
+            AVMutableVideoCompositionLayerInstruction *FirstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:firstTrack];
+            
+            [FirstlayerInstruction setOpacity:0.0 atTime:firstAsset.duration];
+            
+            AVMutableVideoCompositionLayerInstruction *SecondlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:secondTrack];
+            
+            MainInstruction.layerInstructions = [NSArray arrayWithObjects:FirstlayerInstruction,SecondlayerInstruction,nil];;
+            
+            AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
+            videoComposition.renderSize = CGSizeMake(firstAsset.naturalSize.width, firstAsset.naturalSize.height);
+            videoComposition.frameDuration = CMTimeMake(1, 30);
+            
+            AVMutableVideoComposition *MainCompositionInst = [AVMutableVideoComposition videoComposition];
+            MainCompositionInst.instructions = [NSArray arrayWithObject:MainInstruction];
+            MainCompositionInst.frameDuration = CMTimeMake(1, 30);
+            MainCompositionInst.renderSize = CGSizeMake(firstAsset.naturalSize.width, firstAsset.naturalSize.height);
+            
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *documentsDirectory = [paths objectAtIndex:0];
+            NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"mergeVideo-%d.mov",arc4random() % 1000]];
+            
+            NSURL *url = [NSURL fileURLWithPath:myPathDocs];
+            
+            exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetHighestQuality];
+            exporter.outputURL=url;
+            exporter.outputFileType = AVFileTypeQuickTimeMovie;
+            exporter.videoComposition = MainCompositionInst;
+            exporter.shouldOptimizeForNetworkUse = YES;
+            [exporter exportAsynchronouslyWithCompletionHandler:^
+             {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     
+                     finalAsset = [[AVURLAsset alloc] initWithURL:url options:nil];
+                     
+                     AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:finalAsset];
+                     gen.appliesPreferredTrackTransform = YES;
+                     CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+                     NSError *error = nil;
+                     CMTime actualTime;
+                     
+                     CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+                     UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+                     CGImageRelease(image);
+                     
+                     finalVideoPreview.image = thumb;
+                     saveButton.hidden = NO;
+                     //[self exportDidFinish:exporter];
+                 });
+             }];
+        }
+
     }
 }
 

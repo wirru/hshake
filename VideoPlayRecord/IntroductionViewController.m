@@ -497,7 +497,7 @@
     // Hides the controls for moving & scaling pictures, or for
     // trimming movies. To instead show the controls, use YES.
     cameraUI.allowsEditing = NO;
-    cameraUI.videoMaximumDuration = 15.0f;
+    cameraUI.videoMaximumDuration = (first) ? 15.0f : 15.0f;
     
     
     cameraUI.delegate = delegate;
@@ -651,7 +651,7 @@
             
             //AUDIO TRACK
             NSString *soundFilePath = [[NSBundle mainBundle] pathForResource: @"hshake"
-                                                                      ofType: @"mp3"];
+                                                                      ofType: @"m4a"];
             NSURL* songURL = [NSURL fileURLWithPath:soundFilePath];
             AVAsset *audioAsset = [AVAsset assetWithURL:songURL];
             

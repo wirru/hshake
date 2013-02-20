@@ -68,9 +68,9 @@
 		F14F0A07155A561600FE8EF5 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F14F0A06155A561500FE8EF5 /* AssetsLibrary.framework */; };
 		F14F0A09155A562000FE8EF5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F14F0A08155A562000FE8EF5 /* MediaPlayer.framework */; };
 		F14F0A0B155A562800FE8EF5 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F14F0A0A155A562800FE8EF5 /* MobileCoreServices.framework */; };
-		F7B2F62516D41726006C4349 /* hshake.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F7B2F62416D41726006C4349 /* hshake.mp3 */; };
 		F7B2F62B16D41D24006C4349 /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F7B2F62A16D41D24006C4349 /* default@2x.png */; };
 		F7B2F62D16D41D2B006C4349 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F7B2F62C16D41D2B006C4349 /* Default-568h@2x.png */; };
+		F7CE2D8A16D4BDD700B7441E /* hshake.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F7CE2D8916D4BDD700B7441E /* hshake.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -149,9 +149,9 @@
 		F14F0A06155A561500FE8EF5 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		F14F0A08155A562000FE8EF5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		F14F0A0A155A562800FE8EF5 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		F7B2F62416D41726006C4349 /* hshake.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hshake.mp3; sourceTree = "<group>"; };
 		F7B2F62A16D41D24006C4349 /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
 		F7B2F62C16D41D2B006C4349 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		F7CE2D8916D4BDD700B7441E /* hshake.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = hshake.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,7 +266,7 @@
 		F14F09DC155A4DF000FE8EF5 /* VideoPlayRecord */ = {
 			isa = PBXGroup;
 			children = (
-				F7B2F62416D41726006C4349 /* hshake.mp3 */,
+				F7CE2D8916D4BDD700B7441E /* hshake.m4a */,
 				F7B2F62A16D41D24006C4349 /* default@2x.png */,
 				F7B2F61F16D40FED006C4349 /* assets */,
 				F14F09E5155A4DF000FE8EF5 /* AppDelegate.h */,
@@ -368,7 +368,6 @@
 			files = (
 				F14F09E1155A4DF000FE8EF5 /* InfoPlist.strings in Resources */,
 				F14F09EA155A4DF000FE8EF5 /* MainStoryboard.storyboard in Resources */,
-				F7B2F62516D41726006C4349 /* hshake.mp3 in Resources */,
 				F7B2F62B16D41D24006C4349 /* default@2x.png in Resources */,
 				F7B2F62D16D41D2B006C4349 /* Default-568h@2x.png in Resources */,
 				56F7833B16D42776000565C4 /* chatWherever.png in Resources */,
@@ -408,6 +407,7 @@
 				5645E1E016D49F330032FE80 /* backgrounddancingcat.png in Resources */,
 				5645E1E116D49F330032FE80 /* backgrounddancingcat@2x.png in Resources */,
 				5645E1ED16D4AF770032FE80 /* harlemshake.gif in Resources */,
+				F7CE2D8A16D4BDD700B7441E /* hshake.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

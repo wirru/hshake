@@ -670,19 +670,22 @@
             
             AVMutableVideoCompositionLayerInstruction *SecondlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:secondTrack];
             
-            [self fixOrientationForTrack:firstAsset andInstruction:FirstlayerInstruction];
+            UIInterfaceOrientation orient = [self fixOrientationForTrack:firstAsset andInstruction:FirstlayerInstruction];
             [self fixOrientationForTrack:secondAsset andInstruction:SecondlayerInstruction];
             
             MainInstruction.layerInstructions = [NSArray arrayWithObjects:FirstlayerInstruction,SecondlayerInstruction,nil];;
             
-            AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
-            videoComposition.renderSize = CGSizeMake(firstAsset.naturalSize.width, firstAsset.naturalSize.height);
-            videoComposition.frameDuration = CMTimeMake(1, 30);
+//            AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
+//            videoComposition.renderSize = CGSizeMake(firstAsset.naturalSize.width, firstAsset.naturalSize.height);
+//            videoComposition.frameDuration = CMTimeMake(1, 30);
             
             AVMutableVideoComposition *MainCompositionInst = [AVMutableVideoComposition videoComposition];
             MainCompositionInst.instructions = [NSArray arrayWithObject:MainInstruction];
             MainCompositionInst.frameDuration = CMTimeMake(1, 30);
-            MainCompositionInst.renderSize = CGSizeMake(firstAsset.naturalSize.width, firstAsset.naturalSize.height);
+            if (orient == UIInterfaceOrientationPortrait || orient == UIInterfaceOrientationPortraitUpsideDown) {
+                MainCompositionInst.renderSize = CGSizeMake(firstAsset.naturalSize.height, firstAsset.naturalSize.width);
+            } else {
+            }
             
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -724,7 +727,7 @@
     }
 }
 
-- (void) fixOrientationForTrack:(AVAsset *)asset andInstruction:(AVMutableVideoCompositionLayerInstruction*)instruction
+- (UIInterfaceOrientation) fixOrientationForTrack:(AVAsset *)asset andInstruction:(AVMutableVideoCompositionLayerInstruction*)instruction
 {
     AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
     CGSize size = [videoTrack naturalSize];
@@ -746,14 +749,15 @@
         
     } else if (orient == UIInterfaceOrientationPortrait) {
 
-        [instruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI/2), CGAffineTransformMakeTranslation(asset.naturalSize.width, 0)) atTime:kCMTimeZero];
+        [instruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI/2), CGAffineTransformMakeTranslation(asset.naturalSize.height, 0)) atTime:kCMTimeZero];
 
     } else if (orient == UIInterfaceOrientationPortraitUpsideDown) {
-        CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(M_PI/2);
-        CGAffineTransform rotateTranslate = CGAffineTransformTranslate(rotationTransform,asset.naturalSize.width,asset.naturalSize.height);
-        [instruction setTransform:rotateTranslate atTime:kCMTimeZero];
+        [instruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(-M_PI/2), CGAffineTransformMakeTranslation(0, asset.naturalSize.width)) atTime:kCMTimeZero];
+
         
     }
+    
+    return orient;
 }
 
 - (void) playMovie:(AVURLAsset*)movieAsset {

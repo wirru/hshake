@@ -11,6 +11,10 @@
 #import "FlexibleGradientView.h"
 #import <QuartzCore/QuartzCore.h>
 
+
+#import "OLImageView.h"
+#import "OLImage.h"
+
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import <MobileCoreServices/UTCoreTypes.h>
@@ -197,7 +201,15 @@
     
     CGFloat overscanCorrection = _foregroundScrollView.frame.size.width / kForegroundToBackgroundScrollFactor;
     background.frame = CGRectMake(-overscanCorrection, 0, _backgroundScrollView.contentSize.width + 2*overscanCorrection, _backgroundScrollView.frame.size.height/**2/3*/);
-    [_backgroundScrollView addSubview:background];
+    //[_backgroundScrollView addSubview:background];
+    
+    OLImageView *Aimv = [OLImageView new];
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"harlemshake" ofType:@"gif"];
+    NSData *GIFDATA = [NSData dataWithContentsOfFile:filePath];
+    Aimv.image = [OLImage imageWithData:GIFDATA];
+    [Aimv setFrame:background.frame];
+    [_backgroundScrollView addSubview:Aimv];
     
     // Setup the first page
     

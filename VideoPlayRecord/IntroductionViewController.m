@@ -685,6 +685,7 @@
             if (orient == UIInterfaceOrientationPortrait || orient == UIInterfaceOrientationPortraitUpsideDown) {
                 MainCompositionInst.renderSize = CGSizeMake(firstAsset.naturalSize.height, firstAsset.naturalSize.width);
             } else {
+                MainCompositionInst.renderSize = CGSizeMake(firstAsset.naturalSize.width, firstAsset.naturalSize.height);
             }
             
             NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

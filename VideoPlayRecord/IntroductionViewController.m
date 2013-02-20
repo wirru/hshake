@@ -156,8 +156,24 @@
         [self.view addSubview:_pageControl];
 
         [self populateScrollViews];
+        
+        UILabel* cancelLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
+        cancelLabel.text = @"Cancel";
+        cancelLabel.textAlignment = NSTextAlignmentCenter;
+        cancelLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f];
+        cancelLabel.backgroundColor = [UIColor clearColor];
+        cancelLabel.textColor = [UIColor colorWithRed:130.0/255.0 green:5.0/255.0 blue:5.0/255.0 alpha:1];
+        cancelLabel.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tapCancelGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCancel)];
+        [cancelLabel addGestureRecognizer:tapCancelGesture];
+
+        [self.view addSubview:cancelLabel];
     }
     return self;
+}
+
+- (void)tapCancel {
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)viewDidLoad

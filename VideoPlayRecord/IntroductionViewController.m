@@ -360,7 +360,7 @@
     
     UILabel *finalLabel = [UILabel new];
     finalLabel.frame = CGRectMake(640, 100, 320, 40);
-    finalLabel.text = @"Shake it up";
+    finalLabel.text = @"Do the Harlem Shake";
     finalLabel.font = [UIFont fontWithName:@"Dirty Ego" size:32.0f];
     finalLabel.textColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1];
     finalLabel.backgroundColor = [UIColor clearColor];

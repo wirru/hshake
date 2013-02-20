@@ -74,11 +74,18 @@
     AVURLAsset* secondAsset;
     AVURLAsset* finalAsset;
     
+    AVAssetExportSession *exporter;
+    
     UIImageView* firstVideoPreview;
     UIImageView* secondVideoPreview;
     UIImageView* finalVideoPreview;
     
     BOOL first;
+    
+    UIButton *recordFirstButton;
+    UIButton *recordSecondButton;
+    UIButton *mergeButton;
+    UIButton *saveButton;
 }
 
 @end
@@ -179,21 +186,21 @@
     [_foregroundScrollView addSubview:firstVideoPreview];
     
     
-    UIButton* record = [UIButton buttonWithType:UIButtonTypeCustom];
-    record.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
-    record.frame = CGRectMake(0, 0, 280, 50);
-    record.center = CGPointMake(self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
-    [record addTarget:self action:@selector(recordFirst:) forControlEvents:UIControlEventTouchUpInside];
+    recordFirstButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    recordFirstButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
+    recordFirstButton.frame = CGRectMake(0, 0, 280, 50);
+    recordFirstButton.center = CGPointMake(self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
+    [recordFirstButton addTarget:self action:@selector(recordFirst:) forControlEvents:UIControlEventTouchUpInside];
     
-    UILabel* buttonText1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, record.frame.size.width, record.frame.size.height)];
-    buttonText1.center = CGPointMake(record.frame.size.width/2, record.frame.size.height/2);
-    buttonText1.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:45.0f];
+    UILabel* buttonText1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, recordFirstButton.frame.size.width, recordFirstButton.frame.size.height)];
+    buttonText1.center = CGPointMake(recordFirstButton.frame.size.width/2, recordFirstButton.frame.size.height/2);
+    buttonText1.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:25.0f];
     buttonText1.text = @"Record First";
     buttonText1.textColor = [UIColor whiteColor];
     buttonText1.textAlignment = UITextAlignmentCenter;
     buttonText1.backgroundColor = [UIColor clearColor];
-    [record addSubview:buttonText1];
-    [_foregroundScrollView addSubview:record];
+    [recordFirstButton addSubview:buttonText1];
+    [_foregroundScrollView addSubview:recordFirstButton];
     
     
     // Setup the second page
@@ -208,21 +215,21 @@
     [secondVideoPreview addGestureRecognizer:tapSecondVideoGesture];
     [_foregroundScrollView addSubview:secondVideoPreview];
     
-    UIButton* record2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    record2.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
-    record2.frame = CGRectMake(0, 0, 280, 50);
-    record2.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
-    [record2 addTarget:self action:@selector(recordSecond:) forControlEvents:UIControlEventTouchUpInside];
+    recordSecondButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    recordSecondButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
+    recordSecondButton.frame = CGRectMake(0, 0, 280, 50);
+    recordSecondButton.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
+    [recordSecondButton addTarget:self action:@selector(recordSecond:) forControlEvents:UIControlEventTouchUpInside];
     
-    UILabel* buttonText2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, record2.frame.size.width, record2.frame.size.height)];
-    buttonText2.center = CGPointMake(record2.frame.size.width/2, record2.frame.size.height/2);
-    buttonText2.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:45.0f];
+    UILabel* buttonText2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, recordSecondButton.frame.size.width, recordSecondButton.frame.size.height)];
+    buttonText2.center = CGPointMake(recordSecondButton.frame.size.width/2, recordSecondButton.frame.size.height/2);
+    buttonText2.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:25.0f];
     buttonText2.text = @"Record Second";
     buttonText2.textColor = [UIColor whiteColor];
     buttonText2.textAlignment = UITextAlignmentCenter;
     buttonText2.backgroundColor = [UIColor clearColor];
-    [record2 addSubview:buttonText2];
-    [_foregroundScrollView addSubview:record2];
+    [recordSecondButton addSubview:buttonText2];
+    [_foregroundScrollView addSubview:recordSecondButton];
     
         
     // Setup the third page
@@ -237,22 +244,39 @@
     [finalVideoPreview addGestureRecognizer:tapFinalVideoGesture];
     [_foregroundScrollView addSubview:finalVideoPreview];
     
-    UIButton* merge = [UIButton buttonWithType:UIButtonTypeCustom];
-    merge.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
-    merge.frame = CGRectMake(0, 0, 280, 50);
-    merge.center = CGPointMake(self.view.bounds.size.width*(2)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
-    [merge addTarget:self action:@selector(mergeAndSave:) forControlEvents:UIControlEventTouchUpInside];
+    mergeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    mergeButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
+    mergeButton.frame = CGRectMake(0, 0, 280, 50);
+    mergeButton.center = CGPointMake(self.view.bounds.size.width*(2)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
+    [mergeButton addTarget:self action:@selector(mergeAndSave:) forControlEvents:UIControlEventTouchUpInside];
     
-    UILabel* buttonText3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, merge.frame.size.width, merge.frame.size.height)];
-    buttonText3.center = CGPointMake(merge.frame.size.width/2, merge.frame.size.height/2);
-    buttonText3.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:45.0f];
+    UILabel* buttonText3 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, mergeButton.frame.size.width, mergeButton.frame.size.height)];
+    buttonText3.center = CGPointMake(mergeButton.frame.size.width/2, mergeButton.frame.size.height/2);
+    buttonText3.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:25.0f];
     buttonText3.text = @"Get Shakin!";
     buttonText3.textColor = [UIColor whiteColor];
     buttonText3.textAlignment = UITextAlignmentCenter;
     buttonText3.backgroundColor = [UIColor clearColor];
-    [merge addSubview:buttonText3];
-    [_foregroundScrollView addSubview:merge];
+    [mergeButton addSubview:buttonText3];
+    [_foregroundScrollView addSubview:mergeButton];
     
+    
+    saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    saveButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
+    saveButton.frame = CGRectMake(0, 0, 280, 50);
+    saveButton.center = CGPointMake(self.view.bounds.size.width*(2)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2 + 60);
+    [saveButton addTarget:self action:@selector(exportDidFinish:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UILabel* saveButtonText = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, saveButton.frame.size.width, saveButton.frame.size.height)];
+    saveButtonText.center = CGPointMake(saveButton.frame.size.width/2, saveButton.frame.size.height/2);
+    saveButtonText.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:25.0f];
+    saveButtonText.text = @"Save to camera roll";
+    saveButtonText.textColor = [UIColor whiteColor];
+    saveButtonText.textAlignment = UITextAlignmentCenter;
+    saveButtonText.backgroundColor = [UIColor clearColor];
+    [saveButton addSubview:saveButtonText];
+    [_foregroundScrollView addSubview:saveButton];
+    saveButton.hidden = YES;
     
 }
 
@@ -489,7 +513,7 @@
         
         NSURL *url = [NSURL fileURLWithPath:myPathDocs];
         
-        AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetHighestQuality];
+        exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetHighestQuality];
         exporter.outputURL=url;
         exporter.outputFileType = AVFileTypeQuickTimeMovie;
         exporter.videoComposition = MainCompositionInst;
@@ -511,15 +535,16 @@
                  CGImageRelease(image);
                  
                  finalVideoPreview.image = thumb;
-                 
+                 saveButton.hidden = NO;
                  //[self exportDidFinish:exporter];
              });
          }];
     }
 }
 
-- (void)exportDidFinish:(AVAssetExportSession*)session
+- (void)exportDidFinish:(UIButton*)button
 {
+    AVAssetExportSession* session = exporter;
     if(session.status == AVAssetExportSessionStatusCompleted){
         NSURL *outputURL = session.outputURL;
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];

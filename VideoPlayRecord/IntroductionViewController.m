@@ -111,7 +111,7 @@
     self = [super init];
     if (self) {
         first = YES;
-        _orangeColor = [UIColor colorWithRed:243.0f/255.0f green:162.0f/255.0f blue:63.0f/255.0f alpha:1.0f];
+        _orangeColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
         self.view.layer.cornerRadius = CORNER_RADIUS;
         self.view.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
         
@@ -161,17 +161,23 @@
 
         [self populateScrollViews];
         
-        UILabel* cancelLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
-        cancelLabel.text = @"Cancel";
-        cancelLabel.textAlignment = NSTextAlignmentCenter;
-        cancelLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f];
-        cancelLabel.backgroundColor = [UIColor clearColor];
-        cancelLabel.textColor = [UIColor colorWithRed:130.0/255.0 green:5.0/255.0 blue:5.0/255.0 alpha:1];
-        cancelLabel.userInteractionEnabled = YES;
+        
+        UIImageView* cancelButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"x.png"]];
+        cancelButton.frame = CGRectMake(5, 5, 30, 30);
+        cancelButton.userInteractionEnabled = YES;
+//        UILabel* cancelLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
+//        cancelLabel.text = @"Cancel";
+//        cancelLabel.textAlignment = NSTextAlignmentCenter;
+//        cancelLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:22.0f];
+//        cancelLabel.backgroundColor = [UIColor clearColor];
+//        cancelLabel.textColor = [UIColor colorWithRed:130.0/255.0 green:5.0/255.0 blue:5.0/255.0 alpha:1];
+//        cancelLabel.userInteractionEnabled = YES;
         UITapGestureRecognizer *tapCancelGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCancel)];
-        [cancelLabel addGestureRecognizer:tapCancelGesture];
+        [cancelButton addGestureRecognizer:tapCancelGesture];
 
-        [self.view addSubview:cancelLabel];
+//        [cancelLabel addGestureRecognizer:tapCancelGesture];
+
+        [self.view addSubview:cancelButton];
     }
     return self;
 }
@@ -385,7 +391,7 @@
     finalVideoGenerateLabel = [UILabel new];
     finalVideoGenerateLabel.textColor = [UIColor whiteColor];
     finalVideoGenerateLabel.backgroundColor = [UIColor clearColor];
-    finalVideoGenerateLabel.text = @"Record your acts first";
+    finalVideoGenerateLabel.text = @"Record Your Acts First!";
     finalVideoGenerateLabel.textAlignment = NSTextAlignmentCenter;
     finalVideoGenerateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:28.0f];
     finalVideoGenerateLabel.frame = CGRectMake(0, 0, 300, 160);
@@ -555,7 +561,7 @@
             recordSecondButton.hidden = NO;
         }
         if (firstAsset != nil && secondAsset != nil) {
-            finalVideoGenerateLabel.text = @"Generate your movie";
+            finalVideoGenerateLabel.text = @"Go!";
             finalVideoGenerateLabel.hidden = NO;
             finalVideoPlayIcon.hidden = YES;
             finalVideoPreview.image = nil;

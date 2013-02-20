@@ -86,6 +86,16 @@
     UIButton *recordSecondButton;
     UIButton *mergeButton;
     UIButton *saveButton;
+    
+    UIImageView *firstVideoRecordIcon;
+    UIImageView *firstVideoPlayIcon;
+    
+    UIImageView *secondVideoRecordIcon;
+    UIImageView *secondVideoPlayIcon;
+    
+    UILabel *finalVideoGenerateLabel;
+    UIActivityIndicatorView *finalVideoGenerateActivityView;
+    UIImageView *finalVideoPlayIcon;
 }
 
 @end
@@ -210,6 +220,19 @@
     [firstVideoFrame addSubview:firstVideoPreview];
     
     
+    UIView* firstVideoTransparency = [UIView new];
+    firstVideoTransparency.frame = CGRectMake(0, 0, 300, 160);
+    firstVideoTransparency.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
+    [firstVideoPreview addSubview:firstVideoTransparency];
+    
+    firstVideoPlayIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_icon.png"]];
+    firstVideoPlayIcon.frame = CGRectMake(0, 0, 60, 60);
+    firstVideoPlayIcon.center = CGPointMake(150, 80);
+    firstVideoPlayIcon.hidden = YES;
+    [firstVideoPreview addSubview:firstVideoPlayIcon];
+    
+    
+    
     recordFirstButton = [UIButton buttonWithType:UIButtonTypeCustom];
     recordFirstButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
     recordFirstButton.frame = CGRectMake(0, 0, 280, 50);
@@ -261,6 +284,17 @@
     UITapGestureRecognizer *tapSecondVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapSecondMovie)];
     [secondVideoPreview addGestureRecognizer:tapSecondVideoGesture];
     [secondVideoFrame addSubview:secondVideoPreview];
+    
+    UIView* secondVideoTransparency = [UIView new];
+    secondVideoTransparency.frame = CGRectMake(0, 0, 300, 160);
+    secondVideoTransparency.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
+    [secondVideoPreview addSubview:secondVideoTransparency];
+    
+    secondVideoPlayIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_icon.png"]];
+    secondVideoPlayIcon.frame = CGRectMake(0, 0, 60, 60);
+    secondVideoPlayIcon.center = CGPointMake(150, 80);
+    secondVideoPlayIcon.hidden = YES;
+    [secondVideoPreview addSubview:secondVideoPlayIcon];
     
     recordSecondButton = [UIButton buttonWithType:UIButtonTypeCustom];
     recordSecondButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
@@ -314,6 +348,30 @@
     [finalVideoPreview addGestureRecognizer:tapFinalVideoGesture];
     [finalVideoFrame addSubview:finalVideoPreview];
     
+    finalVideoGenerateLabel = [UILabel new];
+    finalVideoGenerateLabel.textColor = [UIColor whiteColor];
+    finalVideoGenerateLabel.backgroundColor = [UIColor clearColor];
+    finalVideoGenerateLabel.text = @"Record your acts first";
+    finalVideoGenerateLabel.textAlignment = NSTextAlignmentCenter;
+    finalVideoGenerateLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:32.0f];
+    finalVideoGenerateLabel.frame = CGRectMake(0, 0, 300, 160);
+    [finalVideoPreview addSubview:finalVideoGenerateLabel];
+    
+    finalVideoGenerateActivityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    finalVideoGenerateActivityView.hidesWhenStopped = YES;
+    finalVideoGenerateActivityView.center = CGPointMake(150,80);
+    [finalVideoPreview addSubview: finalVideoGenerateActivityView];
+    
+    UIView* finalVideoTransparency = [UIView new];
+    finalVideoTransparency.frame = CGRectMake(0, 0, 300, 160);
+    finalVideoTransparency.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
+    [finalVideoPreview addSubview:finalVideoTransparency];
+    
+    finalVideoPlayIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_icon.png"]];
+    finalVideoPlayIcon.frame = CGRectMake(0, 0, 60, 60);
+    finalVideoPlayIcon.center = CGPointMake(150, 80);
+    finalVideoPlayIcon.hidden = YES;
+    [finalVideoPreview addSubview:finalVideoPlayIcon];
     
     
     saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -450,6 +508,7 @@
             CGImageRelease(image);
             
             firstVideoPreview.image = thumb;
+            firstVideoPlayIcon.hidden = NO;
             
         }
         else {
@@ -465,6 +524,14 @@
             CGImageRelease(image);
             
             secondVideoPreview.image = thumb;
+            secondVideoPlayIcon.hidden = NO;
+        }
+        if (firstAsset != nil && secondAsset != nil) {
+            finalVideoGenerateLabel.text = @"Generate your movie";
+            finalVideoGenerateLabel.hidden = NO;
+            finalVideoPlayIcon.hidden = YES;
+            finalVideoPreview.image = nil;
+            finalAsset = nil;
         }
         
         CGPoint offset = _foregroundScrollView.contentOffset;
@@ -538,7 +605,8 @@
     }
     else {
         if(firstAsset !=nil && secondAsset!=nil){
-            //[ActivityView startAnimating];
+            finalVideoGenerateLabel.hidden = YES;
+            [finalVideoGenerateActivityView startAnimating];
             //Create AVMutableComposition Object.This object will hold our multiple AVMutableCompositionTrack.
             AVMutableComposition* mixComposition = [[AVMutableComposition alloc] init];
             
@@ -611,6 +679,9 @@
                      
                      finalVideoPreview.image = thumb;
                      saveButton.hidden = NO;
+                     
+                     [finalVideoGenerateActivityView stopAnimating];
+                     finalVideoPlayIcon.hidden = NO;
                      //[self exportDidFinish:exporter];
                  });
              }];

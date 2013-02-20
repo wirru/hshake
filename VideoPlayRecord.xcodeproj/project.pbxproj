@@ -73,6 +73,7 @@
 		F7CE2D8D16D4C3C600B7441E /* x.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CE2D8B16D4C3C600B7441E /* x.png */; };
 		F7CE2D8E16D4C3C600B7441E /* x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F7CE2D8C16D4C3C600B7441E /* x@2x.png */; };
 		F7CE2D9416D4C62900B7441E /* hshake.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F7CE2D9316D4C62900B7441E /* hshake.m4a */; };
+		F7CE2D9616D4CD1400B7441E /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7CE2D9516D4CD1400B7441E /* iAd.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -156,6 +157,7 @@
 		F7CE2D8B16D4C3C600B7441E /* x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x.png; sourceTree = "<group>"; };
 		F7CE2D8C16D4C3C600B7441E /* x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x@2x.png"; sourceTree = "<group>"; };
 		F7CE2D9316D4C62900B7441E /* hshake.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = hshake.m4a; sourceTree = "<group>"; };
+		F7CE2D9516D4CD1400B7441E /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7CE2D9616D4CD1400B7441E /* iAd.framework in Frameworks */,
 				5645E1EF16D4B0710032FE80 /* ImageIO.framework in Frameworks */,
 				F14F0A0B155A562800FE8EF5 /* MobileCoreServices.framework in Frameworks */,
 				F14F0A09155A562000FE8EF5 /* MediaPlayer.framework in Frameworks */,
@@ -235,6 +238,7 @@
 		F14F09C7155A4DF000FE8EF5 = {
 			isa = PBXGroup;
 			children = (
+				F7CE2D9516D4CD1400B7441E /* iAd.framework */,
 				5645E1EE16D4B0710032FE80 /* ImageIO.framework */,
 				F7B2F62C16D41D2B006C4349 /* Default-568h@2x.png */,
 				F14F0A0A155A562800FE8EF5 /* MobileCoreServices.framework */,
@@ -515,8 +519,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VideoPlayRecord/VideoPlayRecord-Prefix.pch";
 				INFOPLIST_FILE = "VideoPlayRecord/VideoPlayRecord-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -528,8 +534,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "VideoPlayRecord/VideoPlayRecord-Prefix.pch";
 				INFOPLIST_FILE = "VideoPlayRecord/VideoPlayRecord-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

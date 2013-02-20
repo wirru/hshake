@@ -12,7 +12,10 @@
 #import "OLImageView.h"
 #import "OLImage.h"
 
-@implementation ViewController
+
+@implementation ViewController {
+    ADBannerView* _adView;
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -26,6 +29,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    _adView.hidden = YES;
 }
 
 - (void)viewDidUnload
@@ -79,6 +84,27 @@
     [itunesButton addSubview:buttonText2];
     [self.view addSubview:itunesButton];
     
+    _adView = [[ADBannerView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, 0, 0)];
+    _adView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
+    _adView.delegate = self;
+    [self.view addSubview:_adView];
+    
+}
+
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error {
+    banner.hidden = YES;
+}
+
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+    if (!self.bannerIsVisible)
+    {
+        [UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+        // Assumes the banner view is just off the bottom of the screen.
+        banner.frame = CGRectOffset(banner.frame, 0, -banner.frame.size.height);
+        [UIView commitAnimations];
+        self.bannerIsVisible = YES;
+    }
 }
 
 -(void)gotoItunes:(UIButton*)button {

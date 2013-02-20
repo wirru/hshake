@@ -7,6 +7,8 @@
 //  Happy Coding
 
 #import <UIKit/UIKit.h>
+#import "iAd/iAd.h"
+@interface ViewController : UIViewController <ADBannerViewDelegate>
 
-@interface ViewController : UIViewController
+@property (nonatomic, assign) BOOL bannerIsVisible;
 @end

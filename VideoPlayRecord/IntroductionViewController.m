@@ -191,7 +191,7 @@
 - (void)populateScrollViews
 {
     // Setup the background image
-    UIImageView* background = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"introBackgroundAwesome.jpg"]];
+    UIImageView* background = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"backgrounddancingcat.png"]];
     background.contentMode = UIViewContentModeScaleAspectFill;
     background.clipsToBounds = YES;
     
@@ -422,7 +422,7 @@
     _backgroundScrollView.contentOffset = CGPointMake(backgroundTargetOffsetX, _backgroundScrollView.contentOffset.y);
 
     // set opacity of the gradient view
-    CGFloat newOpacity = 0.9f - (0.45*_foregroundScrollView.contentOffset.x / _foregroundScrollView.contentSize.width);
+    CGFloat newOpacity = 0.9f - (0.85*_foregroundScrollView.contentOffset.x / _foregroundScrollView.contentSize.width);
     _smoothGradient.alpha = newOpacity;
 }
 

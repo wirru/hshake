@@ -9,6 +9,9 @@
 #import "ViewController.h"
 #import "IntroductionViewController.h"
 
+#import "OLImageView.h"
+#import "OLImage.h"
+
 @implementation ViewController
 
 - (void)didReceiveMemoryWarning
@@ -35,6 +38,14 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    OLImageView *Aimv = [OLImageView new];
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"harlemshake" ofType:@"gif"];
+    NSData *GIFDATA = [NSData dataWithContentsOfFile:filePath];
+    Aimv.image = [OLImage imageWithData:GIFDATA];
+    [Aimv setFrame:self.view.bounds];
+    [self.view addSubview:Aimv];
     
     UIButton* newShakeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     newShakeButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
@@ -65,7 +76,6 @@
     buttonText2.backgroundColor = [UIColor clearColor];
     [itunesButton addSubview:buttonText2];
     [self.view addSubview:itunesButton];
-
     
 }
 

@@ -234,19 +234,19 @@
     
     recordFirstButton = [UIButton buttonWithType:UIButtonTypeCustom];
     recordFirstButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
-    recordFirstButton.frame = CGRectMake(0, 0, 280, 50);
-    recordFirstButton.center = CGPointMake(self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
+    recordFirstButton.frame = CGRectMake(20, 370, 280, 50);
     [recordFirstButton addTarget:self action:@selector(recordFirst:) forControlEvents:UIControlEventTouchUpInside];
+    recordFirstButton.hidden = YES;
     
     UILabel* buttonText1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, recordFirstButton.frame.size.width, recordFirstButton.frame.size.height)];
     buttonText1.center = CGPointMake(recordFirstButton.frame.size.width/2, recordFirstButton.frame.size.height/2);
     buttonText1.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:25.0f];
-    buttonText1.text = @"Record First";
+    buttonText1.text = @"Record Again";
     buttonText1.textColor = [UIColor whiteColor];
     buttonText1.textAlignment = UITextAlignmentCenter;
     buttonText1.backgroundColor = [UIColor clearColor];
     [recordFirstButton addSubview:buttonText1];
-    //[_foregroundScrollView addSubview:recordFirstButton];
+    [_foregroundScrollView addSubview:recordFirstButton];
     
     
     // Setup the second page
@@ -296,19 +296,19 @@
     
     recordSecondButton = [UIButton buttonWithType:UIButtonTypeCustom];
     recordSecondButton.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
-    recordSecondButton.frame = CGRectMake(0, 0, 280, 50);
-    recordSecondButton.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2, _foregroundScrollView.frame.size.height/2);
+    recordSecondButton.frame = CGRectMake(340, 370, 280, 50);
+    recordSecondButton.hidden = YES;
     [recordSecondButton addTarget:self action:@selector(recordSecond:) forControlEvents:UIControlEventTouchUpInside];
     
     UILabel* buttonText2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, recordSecondButton.frame.size.width, recordSecondButton.frame.size.height)];
     buttonText2.center = CGPointMake(recordSecondButton.frame.size.width/2, recordSecondButton.frame.size.height/2);
     buttonText2.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:25.0f];
-    buttonText2.text = @"Record Second";
+    buttonText2.text = @"Record Again";
     buttonText2.textColor = [UIColor whiteColor];
     buttonText2.textAlignment = UITextAlignmentCenter;
     buttonText2.backgroundColor = [UIColor clearColor];
     [recordSecondButton addSubview:buttonText2];
-    //[_foregroundScrollView addSubview:recordSecondButton];
+    [_foregroundScrollView addSubview:recordSecondButton];
     
         
     // Setup the third page
@@ -420,10 +420,6 @@
 }
 
 
-- (void)recordSecond:(UIButton*)button {
-    first = NO;
-    [self startCameraControllerFromViewController:self usingDelegate:self];
-}
 
 
 -(NSUInteger) supportedInterfaceOrientations {
@@ -509,6 +505,7 @@
             
             firstVideoPreview.image = thumb;
             firstVideoPlayIcon.image = [UIImage imageNamed:@"play_icon.png"];
+            recordFirstButton.hidden = NO;
             
         }
         else {
@@ -525,6 +522,7 @@
             
             secondVideoPreview.image = thumb;
             secondVideoPlayIcon.image = [UIImage imageNamed:@"play_icon.png"];
+            recordSecondButton.hidden = NO;
         }
         if (firstAsset != nil && secondAsset != nil) {
             finalVideoGenerateLabel.text = @"Generate your movie";
@@ -577,15 +575,23 @@
     secondAsset = nil;
 }
 
+- (void)recordFirst:(UIButton*)button {
+    first = YES;
+    [self startCameraControllerFromViewController:self usingDelegate:self];
+}
 
 - (void)tapFirstMovie {
     if(firstAsset != nil) {
         [self playMovie:firstAsset];
     }
     else {
-        first = YES;
-        [self startCameraControllerFromViewController:self usingDelegate:self];
+        [self recordFirst:nil];
     }
+}
+
+- (void)recordSecond:(UIButton*)button {
+    first = NO;
+    [self startCameraControllerFromViewController:self usingDelegate:self];
 }
 
 - (void)tapSecondMovie {
@@ -593,9 +599,7 @@
         [self playMovie:secondAsset];
     }
     else {
-        first = NO;
-        [self startCameraControllerFromViewController:self usingDelegate:self];
-
+        [self recordSecond:nil];
     }
 }
 

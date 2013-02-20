@@ -72,6 +72,11 @@
     
     AVURLAsset* firstAsset;
     AVURLAsset* secondAsset;
+    AVURLAsset* finalAsset;
+    
+    UIImageView* firstVideoPreview;
+    UIImageView* secondVideoPreview;
+    UIImageView* finalVideoPreview;
     
     BOOL first;
 }
@@ -163,6 +168,17 @@
     
     // Setup the first page
     
+    firstVideoPreview = [[UIImageView alloc] init];
+    firstVideoPreview.frame = CGRectMake(0, 0, 320, 180);
+    firstVideoPreview.center = CGPointMake(self.view.bounds.size.width/2, 200);
+    firstVideoPreview.contentMode = UIViewContentModeScaleAspectFill;
+    firstVideoPreview.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tapFirstVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playFirstMovie)];
+    [firstVideoPreview addGestureRecognizer:tapFirstVideoGesture];
+    
+    [_foregroundScrollView addSubview:firstVideoPreview];
+    
+    
     UIButton* record = [UIButton buttonWithType:UIButtonTypeCustom];
     record.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
     record.frame = CGRectMake(0, 0, 280, 50);
@@ -182,6 +198,16 @@
     
     // Setup the second page
 
+    
+    secondVideoPreview = [[UIImageView alloc] init];
+    secondVideoPreview.frame = CGRectMake(0, 0, 320, 180);
+    secondVideoPreview.center = CGPointMake(self.view.bounds.size.width*(1)+self.view.bounds.size.width/2, 200);
+    secondVideoPreview.contentMode = UIViewContentModeScaleAspectFill;
+    secondVideoPreview.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tapSecondVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playSecondMovie)];
+    [secondVideoPreview addGestureRecognizer:tapSecondVideoGesture];
+    [_foregroundScrollView addSubview:secondVideoPreview];
+    
     UIButton* record2 = [UIButton buttonWithType:UIButtonTypeCustom];
     record2.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
     record2.frame = CGRectMake(0, 0, 280, 50);
@@ -197,8 +223,20 @@
     buttonText2.backgroundColor = [UIColor clearColor];
     [record2 addSubview:buttonText2];
     [_foregroundScrollView addSubview:record2];
+    
         
     // Setup the third page
+    
+    
+    finalVideoPreview = [[UIImageView alloc] init];
+    finalVideoPreview.frame = CGRectMake(0, 0, 320, 180);
+    finalVideoPreview.center = CGPointMake(self.view.bounds.size.width*(2)+self.view.bounds.size.width/2, 200);
+    finalVideoPreview.contentMode = UIViewContentModeScaleAspectFill;
+    finalVideoPreview.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tapFinalVideoGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playFinalMovie)];
+    [finalVideoPreview addGestureRecognizer:tapFinalVideoGesture];
+    [_foregroundScrollView addSubview:finalVideoPreview];
+    
     UIButton* merge = [UIButton buttonWithType:UIButtonTypeCustom];
     merge.backgroundColor = [UIColor colorWithRed:33.0f/255.0f green:136.0f/255.0f blue:233.0f/255.0f alpha:1.0f];
     merge.frame = CGRectMake(0, 0, 280, 50);
@@ -214,6 +252,7 @@
     buttonText3.backgroundColor = [UIColor clearColor];
     [merge addSubview:buttonText3];
     [_foregroundScrollView addSubview:merge];
+    
     
 }
 
@@ -325,10 +364,32 @@
         NSString *moviePath = [[info objectForKey:
                                 UIImagePickerControllerMediaURL] path];
         if(first) {
-            firstVideoPath = moviePath;
+            firstAsset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:moviePath] options:nil];
+            AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:firstAsset];
+            gen.appliesPreferredTrackTransform = YES;
+            CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+            NSError *error = nil;
+            CMTime actualTime;
+            
+            CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+            UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+            CGImageRelease(image);
+            
+            firstVideoPreview.image = thumb;
         }
         else {
-            secondVideoPath = moviePath;
+            secondAsset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:moviePath] options:nil];
+            AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:firstAsset];
+            gen.appliesPreferredTrackTransform = YES;
+            CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+            NSError *error = nil;
+            CMTime actualTime;
+            
+            CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+            UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+            CGImageRelease(image);
+            
+            secondVideoPreview.image = thumb;
         }
         
         CGPoint offset = _foregroundScrollView.contentOffset;
@@ -345,8 +406,6 @@
 
 
 - (void) mergeAndSave:(UIButton*)button{
-    firstAsset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:firstVideoPath] options:nil];
-    secondAsset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:secondVideoPath] options:nil];
     
     if(firstAsset !=nil && secondAsset!=nil){
         //[ActivityView startAnimating];
@@ -438,11 +497,27 @@
         [exporter exportAsynchronouslyWithCompletionHandler:^
          {
              dispatch_async(dispatch_get_main_queue(), ^{
-                 [self exportDidFinish:exporter];
+                 
+                 finalAsset = [[AVURLAsset alloc] initWithURL:url options:nil];
+                 
+                 AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:finalAsset];
+                 gen.appliesPreferredTrackTransform = YES;
+                 CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+                 NSError *error = nil;
+                 CMTime actualTime;
+                 
+                 CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+                 UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+                 CGImageRelease(image);
+                 
+                 finalVideoPreview.image = thumb;
+                 
+                 //[self exportDidFinish:exporter];
              });
          }];
     }
 }
+
 - (void)exportDidFinish:(AVAssetExportSession*)session
 {
     if(session.status == AVAssetExportSessionStatusCompleted){
@@ -466,12 +541,55 @@
         }
     }
 	
-    //audioAsset = nil;
-    firstVideoPath = nil;
-    secondVideoPath = nil;
     firstAsset = nil;
     secondAsset = nil;
-    //[ActivityView stopAnimating];
 }
+
+- (void)playFirstMovie {
+    if(firstAsset != nil) {
+        [self playMovie:firstAsset];
+    }
+}
+
+- (void)playSecondMovie {
+    if(secondAsset != nil) {
+        [self playMovie:secondAsset];
+    }
+}
+
+- (void)playFinalMovie {
+    if(finalAsset != nil) {
+        [self playMovie:finalAsset];
+    }
+}
+
+- (void) playMovie:(AVURLAsset*)movieAsset {
+    MPMoviePlayerViewController* theMovie =
+    [[MPMoviePlayerViewController alloc] initWithContentURL: [movieAsset URL]];
+    [self presentMoviePlayerViewControllerAnimated:theMovie];
+    
+    // Register for the playback finished notification
+    [[NSNotificationCenter defaultCenter]
+     addObserver: self
+     selector: @selector(myMovieFinishedCallback:)
+     name: MPMoviePlayerPlaybackDidFinishNotification
+     object: theMovie];
+    
+    
+}
+// When the movie is done, release the controller.
+-(void) myMovieFinishedCallback: (NSNotification*) aNotification
+{
+    [self dismissMoviePlayerViewControllerAnimated];
+    
+    MPMoviePlayerController* theMovie = [aNotification object];
+    
+    [[NSNotificationCenter defaultCenter]
+     removeObserver: self
+     name: MPMoviePlayerPlaybackDidFinishNotification
+     object: theMovie];
+    // Release the movie instance created in playMovieAtURL:
+}
+
 
 @end

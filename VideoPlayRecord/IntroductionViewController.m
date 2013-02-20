@@ -571,8 +571,6 @@
     }
 }
 
-
-
 - (void)exportDidFinish:(UIButton*)button
 {
     AVAssetExportSession* session = exporter;
@@ -666,10 +664,12 @@
             
             //FIXING ORIENTATION//
             AVMutableVideoCompositionLayerInstruction *FirstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:firstTrack];
-            
             [FirstlayerInstruction setOpacity:0.0 atTime:firstAsset.duration];
             
             AVMutableVideoCompositionLayerInstruction *SecondlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:secondTrack];
+            
+            [self fixOrientationForTrack:firstAsset andInstruction:FirstlayerInstruction];
+            [self fixOrientationForTrack:secondAsset andInstruction:SecondlayerInstruction];
             
             MainInstruction.layerInstructions = [NSArray arrayWithObjects:FirstlayerInstruction,SecondlayerInstruction,nil];;
             
@@ -719,6 +719,38 @@
              }];
         }
 
+    }
+}
+
+- (void) fixOrientationForTrack:(AVAsset *)asset andInstruction:(AVMutableVideoCompositionLayerInstruction*)instruction
+{
+    AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    CGSize size = [videoTrack naturalSize];
+    CGAffineTransform txf = [videoTrack preferredTransform];
+    
+    UIInterfaceOrientation orient;
+    if (size.width == txf.tx && size.height == txf.ty)
+        orient = UIInterfaceOrientationLandscapeRight;
+    else if (txf.tx == 0 && txf.ty == 0)
+        orient = UIInterfaceOrientationLandscapeLeft;
+    else if (txf.tx == 0 && txf.ty == size.width)
+        orient = UIInterfaceOrientationPortraitUpsideDown;
+    else
+        orient = UIInterfaceOrientationPortrait;
+    
+    
+    if (orient == UIInterfaceOrientationLandscapeRight) {
+        [instruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI),CGAffineTransformMakeTranslation(asset.naturalSize.width, asset.naturalSize.height)) atTime:kCMTimeZero];
+        
+    } else if (orient == UIInterfaceOrientationPortrait) {
+
+        [instruction setTransform:CGAffineTransformConcat(CGAffineTransformMakeRotation(M_PI/2), CGAffineTransformMakeTranslation(asset.naturalSize.width, 0)) atTime:kCMTimeZero];
+
+    } else if (orient == UIInterfaceOrientationPortraitUpsideDown) {
+        CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(M_PI/2);
+        CGAffineTransform rotateTranslate = CGAffineTransformTranslate(rotationTransform,asset.naturalSize.width,asset.naturalSize.height);
+        [instruction setTransform:rotateTranslate atTime:kCMTimeZero];
+        
     }
 }
 

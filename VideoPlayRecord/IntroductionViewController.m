@@ -225,10 +225,9 @@
     firstVideoTransparency.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
     [firstVideoPreview addSubview:firstVideoTransparency];
     
-    firstVideoPlayIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_icon.png"]];
+    firstVideoPlayIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"record_icon.png"]];
     firstVideoPlayIcon.frame = CGRectMake(0, 0, 60, 60);
     firstVideoPlayIcon.center = CGPointMake(150, 80);
-    firstVideoPlayIcon.hidden = YES;
     [firstVideoPreview addSubview:firstVideoPlayIcon];
     
     
@@ -290,10 +289,9 @@
     secondVideoTransparency.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
     [secondVideoPreview addSubview:secondVideoTransparency];
     
-    secondVideoPlayIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_icon.png"]];
+    secondVideoPlayIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"record_icon.png"]];
     secondVideoPlayIcon.frame = CGRectMake(0, 0, 60, 60);
     secondVideoPlayIcon.center = CGPointMake(150, 80);
-    secondVideoPlayIcon.hidden = YES;
     [secondVideoPreview addSubview:secondVideoPlayIcon];
     
     recordSecondButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -348,12 +346,18 @@
     [finalVideoPreview addGestureRecognizer:tapFinalVideoGesture];
     [finalVideoFrame addSubview:finalVideoPreview];
     
+    
+    UIView* finalVideoTransparency = [UIView new];
+    finalVideoTransparency.frame = CGRectMake(0, 0, 300, 160);
+    finalVideoTransparency.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
+    [finalVideoPreview addSubview:finalVideoTransparency];
+    
     finalVideoGenerateLabel = [UILabel new];
     finalVideoGenerateLabel.textColor = [UIColor whiteColor];
     finalVideoGenerateLabel.backgroundColor = [UIColor clearColor];
     finalVideoGenerateLabel.text = @"Record your acts first";
     finalVideoGenerateLabel.textAlignment = NSTextAlignmentCenter;
-    finalVideoGenerateLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:32.0f];
+    finalVideoGenerateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:28.0f];
     finalVideoGenerateLabel.frame = CGRectMake(0, 0, 300, 160);
     [finalVideoPreview addSubview:finalVideoGenerateLabel];
     
@@ -362,10 +366,6 @@
     finalVideoGenerateActivityView.center = CGPointMake(150,80);
     [finalVideoPreview addSubview: finalVideoGenerateActivityView];
     
-    UIView* finalVideoTransparency = [UIView new];
-    finalVideoTransparency.frame = CGRectMake(0, 0, 300, 160);
-    finalVideoTransparency.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.3];
-    [finalVideoPreview addSubview:finalVideoTransparency];
     
     finalVideoPlayIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play_icon.png"]];
     finalVideoPlayIcon.frame = CGRectMake(0, 0, 60, 60);
@@ -508,7 +508,7 @@
             CGImageRelease(image);
             
             firstVideoPreview.image = thumb;
-            firstVideoPlayIcon.hidden = NO;
+            firstVideoPlayIcon.image = [UIImage imageNamed:@"play_icon.png"];
             
         }
         else {
@@ -524,7 +524,7 @@
             CGImageRelease(image);
             
             secondVideoPreview.image = thumb;
-            secondVideoPlayIcon.hidden = NO;
+            secondVideoPlayIcon.image = [UIImage imageNamed:@"play_icon.png"];
         }
         if (firstAsset != nil && secondAsset != nil) {
             finalVideoGenerateLabel.text = @"Generate your movie";

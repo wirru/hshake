@@ -175,6 +175,25 @@
     
     // Setup the first page
     
+    
+    UILabel *firstTitle = [UILabel new];
+    firstTitle.frame = CGRectMake(0, 30, 320, 70);
+    firstTitle.text = @"ACT 1";
+    firstTitle.font = [UIFont fontWithName:@"Dirty Ego" size:65.0f];
+    firstTitle.textColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1];
+    firstTitle.backgroundColor = [UIColor clearColor];
+    firstTitle.textAlignment = NSTextAlignmentCenter;
+    [_foregroundScrollView addSubview:firstTitle];
+    
+    UILabel *firstLabel = [UILabel new];
+    firstLabel.frame = CGRectMake(0, 100, 320, 40);
+    firstLabel.text = @"Record your first half";
+    firstLabel.font = [UIFont fontWithName:@"Dirty Ego" size:32.0f];
+    firstLabel.textColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1];
+    firstLabel.backgroundColor = [UIColor clearColor];
+    firstLabel.textAlignment = NSTextAlignmentCenter;
+    [_foregroundScrollView addSubview:firstLabel];
+    
     firstVideoPreview = [[UIImageView alloc] init];
     firstVideoPreview.frame = CGRectMake(0, 0, 320, 180);
     firstVideoPreview.center = CGPointMake(self.view.bounds.size.width/2, 200);
@@ -204,7 +223,25 @@
     
     
     // Setup the second page
+    
+    UILabel *secondTitle = [UILabel new];
+    secondTitle.frame = CGRectMake(320, 30, 320, 70);
+    secondTitle.text = @"ACT 2";
+    secondTitle.font = [UIFont fontWithName:@"Dirty Ego" size:65.0f];
+    secondTitle.textColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1];
+    secondTitle.backgroundColor = [UIColor clearColor];
+    secondTitle.textAlignment = NSTextAlignmentCenter;
+    [_foregroundScrollView addSubview:secondTitle];
 
+    
+    UILabel *secondLabel = [UILabel new];
+    secondLabel.frame = CGRectMake(320, 100, 320, 40);
+    secondLabel.text = @"Record your second half";
+    secondLabel.font = [UIFont fontWithName:@"Dirty Ego" size:32.0f];
+    secondLabel.textColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1];
+    secondLabel.backgroundColor = [UIColor clearColor];
+    secondLabel.textAlignment = NSTextAlignmentCenter;
+    [_foregroundScrollView addSubview:secondLabel];
     
     secondVideoPreview = [[UIImageView alloc] init];
     secondVideoPreview.frame = CGRectMake(0, 0, 320, 180);
@@ -233,7 +270,24 @@
     
         
     // Setup the third page
+    UILabel *finalTitle = [UILabel new];
+    finalTitle.frame = CGRectMake(640, 30, 320, 70);
+    finalTitle.text = @"Epilogue";
+    finalTitle.font = [UIFont fontWithName:@"Dirty Ego" size:65.0f];
+    finalTitle.textColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1];
+    finalTitle.backgroundColor = [UIColor clearColor];
+    finalTitle.textAlignment = NSTextAlignmentCenter;
+    [_foregroundScrollView addSubview:finalTitle];
     
+    
+    UILabel *finalLabel = [UILabel new];
+    finalLabel.frame = CGRectMake(640, 100, 320, 40);
+    finalLabel.text = @"Shake it up";
+    finalLabel.font = [UIFont fontWithName:@"Dirty Ego" size:32.0f];
+    finalLabel.textColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1];
+    finalLabel.backgroundColor = [UIColor clearColor];
+    finalLabel.textAlignment = NSTextAlignmentCenter;
+    [_foregroundScrollView addSubview:finalLabel];
     
     finalVideoPreview = [[UIImageView alloc] init];
     finalVideoPreview.frame = CGRectMake(0, 0, 320, 180);

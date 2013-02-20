@@ -45,6 +45,8 @@
     NSData *GIFDATA = [NSData dataWithContentsOfFile:filePath];
     Aimv.image = [OLImage imageWithData:GIFDATA];
     [Aimv setFrame:self.view.bounds];
+    Aimv.contentMode = UIViewContentModeScaleAspectFill;
+    Aimv.clipsToBounds = YES;
     [self.view addSubview:Aimv];
     
     UIButton* newShakeButton = [UIButton buttonWithType:UIButtonTypeCustom];

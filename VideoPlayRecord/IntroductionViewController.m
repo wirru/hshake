@@ -208,6 +208,8 @@
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"harlemshake" ofType:@"gif"];
     NSData *GIFDATA = [NSData dataWithContentsOfFile:filePath];
     Aimv.image = [OLImage imageWithData:GIFDATA];
+    Aimv.contentMode = UIViewContentModeScaleAspectFill;
+    Aimv.clipsToBounds = YES;
     [Aimv setFrame:background.frame];
     [_backgroundScrollView addSubview:Aimv];
     
